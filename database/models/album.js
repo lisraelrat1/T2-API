@@ -20,13 +20,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: DataTypes.STRING,
     genre: DataTypes.STRING,
-    // artist: DataTypes.STRING,
-    // tracks: DataTypes.STRING,
-    // self: DataTypes.STRING,
     artist_id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Album',
+    timestamps: false,
   });
 
   Album.associate = function(models) {

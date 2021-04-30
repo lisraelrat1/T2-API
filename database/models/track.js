@@ -21,14 +21,12 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     duration: DataTypes.FLOAT,
     times_played: DataTypes.INTEGER,
-    // artist: DataTypes.STRING,
-    // album: DataTypes.STRING,
-    // self: DataTypes.STRING,
     album_id: DataTypes.STRING,
     artist_id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Track',
+    timestamps: false,
   });
   Track.associate = function(models) {
     Track.belongsTo(models.Artist, {

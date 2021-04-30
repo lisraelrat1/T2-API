@@ -7,13 +7,21 @@ getTracks : async (req,res) => {
     const tracks = await Track.findAll();
     var fullUrl = req.protocol + '://' + req.get('host')
 
+    let tracks_edited = []
     tracks.forEach(element => {
-      element.dataValues['artist'] = fullUrl + `/artists/${element.artist_id}`;
-      element.dataValues['album'] = fullUrl + `/albums/${element.album_id}`;
-      element.dataValues['self'] = fullUrl + `/tracks/${element.id}`;
+      tracks_edited.push({
+        id: element.id,
+        album_id: element.album_id,
+        name: element.name,
+        duration: element.duration,
+        times_played: element.times_played,
+        artist: fullUrl + `/artists/${element.artist_id}`,
+        album: fullUrl + `/albums/${element.album_id}`,
+        self: fullUrl + `/tracks/${element.id}`
+      })
     });
 
-    return res.status(200).send(tracks); 
+    return res.status(200).send(tracks_edited);
 },
 
 //Obtener track por trackId
@@ -32,11 +40,19 @@ getTrack : async (req, res) => {
         message: `No track found with the id ${track_id}`,
       });
     }
-    track.dataValues['artist'] = fullUrl + `/artists/${track.album_id}`;
-    track.dataValues['self'] = fullUrl + `/tracks/${track.id}`;
-    track.dataValues['self'] = fullUrl + `/tracks/${track.id}`;
 
-    return res.status(200).send(track);
+    return res.status(200).send(
+      {
+        id: track.id,
+        album_id: track.album_id,
+        name: track.name,
+        duration: track.duration,
+        times_played: track.times_played,
+        artist: fullUrl + `/artists/${track.artist_id}`,
+        album: fullUrl + `/albums/${track.album_id}`,
+        self: fullUrl + `/tracks/${track.id}`
+      }
+    );
 },
 
 //Obtener tracks de un artista
@@ -56,13 +72,21 @@ getAllArtistTracks : async (req, res) => {
       });
     }
 
+    let tracks_edited = []
     tracks.forEach(element => {
-      element.dataValues['artist'] = fullUrl + `/artists/${element.artist_id}`;
-      element.dataValues['album'] = fullUrl + `/albums/${element.album_id}`;
-      element.dataValues['self'] = fullUrl + `/tracks/${element.id}`;
+      tracks_edited.push({
+        id: element.id,
+        album_id: element.album_id,
+        name: element.name,
+        duration: element.duration,
+        times_played: element.times_played,
+        artist: fullUrl + `/artists/${element.artist_id}`,
+        album: fullUrl + `/albums/${element.album_id}`,
+        self: fullUrl + `/tracks/${element.id}`
+      })
     });
 
-    return res.status(200).send(tracks);
+    return res.status(200).send(tracks_edited);
 },
 
 //Obtener tracks de un album
@@ -81,13 +105,22 @@ getAllAlbumTracks : async (req, res) => {
         message: `No albums were found with id ${album_id}`,
       });
     }
+
+    let tracks_edited = []
     tracks.forEach(element => {
-      element.dataValues['artist'] = fullUrl + `/artists/${element.artist_id}`;
-      element.dataValues['album'] = fullUrl + `/albums/${element.album_id}`;
-      element.dataValues['self'] = fullUrl + `/tracks/${element.id}`;
+      tracks_edited.push({
+        id: element.id,
+        album_id: element.album_id,
+        name: element.name,
+        duration: element.duration,
+        times_played: element.times_played,
+        artist: fullUrl + `/artists/${element.artist_id}`,
+        album: fullUrl + `/albums/${element.album_id}`,
+        self: fullUrl + `/tracks/${element.id}`
+      })
     });
 
-    return res.status(200).send(tracks);
+    return res.status(200).send(tracks_edited);
 },
 
 //Crea Track
@@ -120,12 +153,18 @@ createTrack : async (req, res) => {
     });
   
     if (trackidExists) {
-      trackidExists.dataValues['artist'] = fullUrl + `/artists/${trackidExists.album_id}`;
-      trackidExists.dataValues['self'] = fullUrl + `/tracks/${trackidExists.id}`;
-      trackidExists.dataValues['self'] = fullUrl + `/tracks/${trackidExists.id}`;
       return res.status(409).send({
         message: 'A track with that id already exists!',
-        body: trackidExists,
+        body: {
+          id: trackidExists.id,
+          album_id: trackidExists.album_id,
+          name: trackidExists.name,
+          duration: trackidExists.duration,
+          times_played: trackidExists.times_played,
+          artist: fullUrl + `/artists/${trackidExists.artist_id}`,
+          album: fullUrl + `/albums/${trackidExists.album_id}`,
+          self: fullUrl + `/tracks/${trackidExists.id}`
+        }
       });
     }
 
@@ -154,11 +193,18 @@ createTrack : async (req, res) => {
         times_played: 0
       });
 
-      newtrack.dataValues['artist'] = fullUrl + `/artists/${newtrack.album_id}`;
-      newtrack.dataValues['self'] = fullUrl + `/tracks/${newtrack.id}`;
-      newtrack.dataValues['self'] = fullUrl + `/tracks/${newtrack.id}`;
-
-      return res.status(201).send(newtrack);
+      return res.status(201).send(
+        {
+          id: newtrack.id,
+          album_id: newtrack.album_id,
+          name: newtrack.name,
+          duration: newtrack.duration,
+          times_played: newtrack.times_played,
+          artist: fullUrl + `/artists/${newtrack.artist_id}`,
+          album: fullUrl + `/albums/${newtrack.album_id}`,
+          self: fullUrl + `/tracks/${newtrack.id}`
+        }
+      );
     } catch (err) {
       return res.status(400).send({
         message: `Error: ${err.message}`,
@@ -166,7 +212,7 @@ createTrack : async (req, res) => {
     }
   },
 
-  deleteTrack : async (req, res) => {
+deleteTrack : async (req, res) => {
     const { track_id } = req.params;
     if (!track_id) {
       return res.status(400).send({
@@ -192,7 +238,7 @@ createTrack : async (req, res) => {
         message: `Track ${track_id} has been deleted!`,
       });
     } catch (err) {
-      return res.status(400).send({
+      return res.status(404).send({
         message: `Error: ${err.message}`,
       });
     }
