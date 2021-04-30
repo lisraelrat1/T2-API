@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "btoa": "^1.2.1",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "eam": "0.0.1",
     "esm": "^3.2.25",

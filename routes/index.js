@@ -5,8 +5,6 @@ const tracks = require('../controllers').tracks;
 
 const router = Router();
 
-const todosController = require('../controllers').todos;
-
 router.get('/', (req, res) => res.send('Welcome'))
 
 //Artist
