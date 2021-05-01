@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "env NODE_ENV=development nodemon scr/index.js",
     "start": "nodemon index.js"
   },
   "author": "",
@@ -23,5 +22,9 @@
     "pg": "^8.6.0",
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0"
+  },
+  "engines": {
+    "node": "14.16.1",
+    "npm": "6.14.12"
   }
 }
