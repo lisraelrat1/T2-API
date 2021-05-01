@@ -12,5 +12,5 @@ module.exports = {
   production: {
     url: process.env.HEROKU_DATABASE_URL,
     dialect: 'postgres',
-  },
+  }
 }
