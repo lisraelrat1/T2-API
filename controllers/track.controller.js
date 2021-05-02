@@ -65,10 +65,16 @@ getAllArtistTracks : async (req, res) => {
         artist_id: artist_id,
       },
     });
+
+    const artist = await db.Artist.findOne({
+      where: {
+        id: artist_id
+      },
+    });
   
-    if (tracks.length == 0) {
+    if (!artist) {
       return res.status(400).send({
-        message: `No tracks were found for the artist with id ${artist_id}`,
+        message: `No artist with id ${artist_id} was found`,
       });
     }
 
@@ -99,12 +105,6 @@ getAllAlbumTracks : async (req, res) => {
         album_id: album_id,
       },
     });
-  
-    // if (tracks.length == 0) {
-    //   return res.status(400).send({
-    //     message: `No albums were found with id ${album_id}`,
-    //   });
-    // }
 
     const album = await db.Album.findOne({
       where: {

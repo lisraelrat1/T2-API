@@ -31,11 +31,13 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'artist_id',
       as: 'albums',
       onDelete: 'CASCADE',
+      hooks: true,
     });
     Artist.hasMany(models.Track, { 
       foreignKey: 'artist_id',
       as: 'tracks', 
       onDelete: 'CASCADE',
+      hooks: true,
     });
   };
 
