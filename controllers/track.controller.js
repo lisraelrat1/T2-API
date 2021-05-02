@@ -187,8 +187,9 @@ createTrack : async (req, res) => {
        });
     
     if (!album) {
+        console.log('no hay album')
         return res.status(422).send({
-          message: `No tracks were found for the album with id ${album_id}`,
+          message: `No albums were found with id ${album_id}`,
         });
       } 
   

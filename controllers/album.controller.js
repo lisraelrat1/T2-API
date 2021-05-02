@@ -118,6 +118,7 @@ createAlbum : async (req, res) => {
       });
     
     if (!artist) {
+        console.log('no hay artista')
         return res.status(422).send({
           message: `No artist were found for the artist with id ${artist_id}`,
         });
