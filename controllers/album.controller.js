@@ -42,18 +42,24 @@ getAlbum : async (req, res) => {
 //Obtener todos los albums con ArtistId
 getAllArtistAlbums : async (req, res) => {
     const { artist_id } = req.params;
+
+    const artist = await db.Artist.findOne({
+      where:{
+        id: artist_id
+      }
+    })
+
+    if (!artist){
+      return res.status(400).send({
+      message: `No artist found with id ${artist_id }`
+        }
+      )};
   
     const albums = await Album.findAll({
       where: {
         artist_id: artist_id,
       },
     });
-  
-    if (albums.length == 0) {
-      return res.status(400).send({
-        message: `No albums were found for the artist with id ${artist_id }`,
-      });
-    }
 
     var fullUrl = req.protocol + '://' + req.get('host')
 
@@ -62,7 +68,6 @@ getAllArtistAlbums : async (req, res) => {
       element.dataValues['tracks'] = fullUrl + `/albums/${element.id}/tracks`;
       element.dataValues['self'] = fullUrl + `/albums/${element.id}`;
     });
-
 
     return res.status(200).send(albums);
 },
@@ -139,7 +144,7 @@ createAlbum : async (req, res) => {
     }
   },
 
-  deleteAlbum : async (req, res) => {
+deleteAlbum : async (req, res) => {
     const { album_id } = req.params;
     if (!album_id) {
       return res.status(400).send({

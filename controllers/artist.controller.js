@@ -99,8 +99,8 @@ createArtist : async (req, res) => {
   },
 
 deleteArtist : async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
+    const { artist_id } = req.params;
+    if (!artist_id) {
       return res.status(400).send({
         message: 'Please provide a id for the artist you are trying to delete!',
       });
@@ -108,20 +108,20 @@ deleteArtist : async (req, res) => {
   
     const artist = await Artist.findOne({
       where: {
-        id: id
+        id: artist_id
       },
     });
   
     if (!artist) {
       return res.status(404).send({
-        message: `No artist found with the id ${id}`,
+        message: `No artist found with the id ${artist_id}`,
       });
     }
   
     try {
       await artist.destroy();
       return res.status(204).send({
-        message: `Artist ${id} has been deleted!`,
+        message: `Artist ${artist_id} has been deleted!`,
       });
     } catch (err) {
       return res.status(400).send({
