@@ -4,4 +4,8 @@ const server = require('./server.js');
 
 const PORT = process.env.PORT || 3300;
 
-server.listen(PORT, () => console.log(`Server is live at localhost:${PORT}`))
+server.listen(PORT, () => {
+    const port = server.address().port;
+    console.log(`Express is working on port ${port}`);
+})
+
