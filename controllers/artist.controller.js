@@ -119,6 +119,7 @@ deleteArtist : async (req, res) => {
     }
   
     try {
+      
       await artist.destroy();
       return res.status(204).send({
         message: `Artist ${artist_id} has been deleted!`,
