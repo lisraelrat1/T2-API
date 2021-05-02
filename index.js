@@ -4,9 +4,8 @@ const server = require('./server.js');
 
 const PORT = process.env.PORT || 3300;
 
-server.listen(PORT, () => {
-    console.log(`Express is working on port ${PORT}`);
-})
+
+server.listen(PORT, () => console.log(`Server is live at localhost:${PORT}`))
 
 server.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -16,4 +15,4 @@ server.use((req, res, next) => {
       'Origin, X-Requested-With, Content-Type, Accept'
     );
     next();
-  });
+});

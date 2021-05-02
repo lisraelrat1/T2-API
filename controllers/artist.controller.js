@@ -27,9 +27,7 @@ getArtist : async (req, res) => {
     });
   
     if (!artist) {
-      return res.status(404).send({
-        message: `No artist found with the id ${artist_id}`,
-      });
+      return res.status(404).send();
     }
 
     var fullUrl = req.protocol + '://' + req.get('host')
@@ -39,65 +37,65 @@ getArtist : async (req, res) => {
     return res.status(200).send(artist);
 },
 
+
+//Crea Album
 createArtist : async (req, res) => {
-    console.log(req.originalUrl)
-    const { name, age } = req.body;
-    console.log(name, age)
-    if (!name || !age) {
-      return res.status(400).send({
-        message: 'Please provide the artist name and age to create an artist!',
-      });
-    }
-
-    function codificar(string) {
-        let identificador = btoa(string)
-        if (identificador.length <= 22){
-            return identificador
-        }
-        else {
-            return identificador.slice(0,22)
-        } 
-    }
-
-    let artistidExists = await Artist.findOne({
-      where: {
-        id: codificar(name),
-      },
+  const { name, age } = req.body;
+  console.log(name,age)
+  var fullUrl = req.protocol + '://' + req.get('host')
+  console.log(fullUrl)
+  if (!name || !age) {
+    return res.status(400).send({
+      message: 'Please provide the albums name and genre to create an album!',
     });
-  
-    if (artistidExists) {
-      console.log('ya existe')
-      var fullUrl = req.protocol + '://' + req.get('host')
-      artistidExists.dataValues['albums'] = fullUrl + `/artists/${artistidExists.id}/albums`;
-      artistidExists.dataValues['tracks'] = fullUrl + `/artists/${artistidExists.id}/tracks`;
-      artistidExists.dataValues['self'] = fullUrl + `/artists/${artistidExists.id}`;
+  }
 
-      return res.status(409).send({
-        message: 'An artist with that id already exists!',
-        body: artistidExists,
-      });
-    }
-  
-    try {
+  function codificar(string) {
+      let identificador = btoa(string)
+      if (identificador.length <= 22){
+          return identificador
+      }
+      else {
+          return identificador.slice(0,22)
+      } 
+  }
 
-      let identificador = codificar(name);
-      var fullUrl = req.protocol + '://' + req.get('host')
+  let artistidExists = await Artist.findOne({
+    where: {
+      id: codificar(name),
+    },
+  });
 
-      let newartist = await Artist.create({
-        id: identificador,
-        name: name,
-        age: age,
-      });
-      newartist.dataValues['albums'] = fullUrl + `/artists/${identificador}/albums`;
-      newartist.dataValues['tracks'] = fullUrl + `/artists/${identificador}/tracks`;
-      newartist.dataValues['self'] = fullUrl + `/artists/${identificador}`;
-      return res.status(201).send(newartist);
-    } catch (err) {
-      return res.status(400).send({
-        message: `Error: ${err.message}`,
-      });
-    }
-  },
+  console.log('existe artista',artistidExists)
+
+  if (artistidExists) {
+    artistidExists.dataValues['albums'] = fullUrl + `/artists/${artistidExists.id}/albums`;
+    artistidExists.dataValues['tracks'] = fullUrl + `/artists/${artistidExists.id}/tracks`;
+    artistidExists.dataValues['self'] = fullUrl + `/artists/${artistidExists.id}`;
+
+    return res.status(409).send(artistidExists)
+  }
+
+  try {
+
+    let identificador = codificar(name);
+
+    let newartist = await Artist.create({
+      id: identificador,
+      name: name,
+      age: age,
+    });
+    newartist.dataValues['albums'] = fullUrl + `/artists/${newartist.id}/albums`;
+    newartist.dataValues['tracks'] = fullUrl + `/artists/${newartist.id}/tracks`;
+    newartist.dataValues['self'] = fullUrl + `/artists/${newartist.id}`;
+    console.log(newartist)
+    return res.status(201).send(newartist);
+  } catch (err) {
+    return res.status(400).send({
+      message: `Error: ${err.message}`,
+    });
+  }
+},
 
 deleteArtist : async (req, res) => {
     const { artist_id } = req.params;
@@ -112,19 +110,15 @@ deleteArtist : async (req, res) => {
         id: artist_id
       },
     });
+    console.log(artist)
   
     if (!artist) {
-      return res.status(404).send({
-        message: `No artist found with the id ${artist_id}`,
-      });
+      return res.status(404).send();
     }
   
     try {
-      
       await artist.destroy();
-      return res.status(204).send({
-        message: `Artist ${artist_id} has been deleted!`,
-      });
+      return res.status(204).send();
     } catch (err) {
       return res.status(400).send({
         message: `Error: ${err.message}`,

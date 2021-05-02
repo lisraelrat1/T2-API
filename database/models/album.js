@@ -31,12 +31,12 @@ module.exports = (sequelize, DataTypes) => {
     Album.hasMany(models.Track, {
       foreignKey: 'album_id',
       as: 'tracks', 
+      onDelete: 'CASCADE',
+      hooks: true,
     });
     Album.belongsTo(models.Artist, {
       foreignKey: 'artist_id',
       as: 'artist',
-      onDelete: 'CASCADE',
-      hooks: true,
     })
   };
 

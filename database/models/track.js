@@ -32,14 +32,10 @@ module.exports = (sequelize, DataTypes) => {
     Track.belongsTo(models.Artist, {
       foreignKey: 'artist_id',
       as: 'artist',
-      onDelete: 'CASCADE',
-      hooks: true,
     });
     Track.belongsTo(models.Album, {
       foreignKey: 'album_id',
       as: 'album',
-      onDelete: 'CASCADE',
-      hooks: true,
     })
   };
 

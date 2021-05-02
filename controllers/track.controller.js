@@ -36,9 +36,7 @@ getTrack : async (req, res) => {
     });
   
     if (!track) {
-      return res.status(400).send({
-        message: `No track found with the id ${track_id}`,
-      });
+      return res.status(404).send();
     }
 
     return res.status(200).send(
@@ -73,9 +71,7 @@ getAllArtistTracks : async (req, res) => {
     });
   
     if (!artist) {
-      return res.status(400).send({
-        message: `No artist with id ${artist_id} was found`,
-      });
+      return res.status(404).send();
     }
 
     let tracks_edited = []
@@ -113,9 +109,7 @@ getAllAlbumTracks : async (req, res) => {
     })
 
     if (!album){
-      return res.status(400).send({
-        message: `No albums were found with id ${album_id}`,
-      });
+      return res.status(404).send();
     }
 
     let tracks_edited = []
@@ -157,41 +151,35 @@ createTrack : async (req, res) => {
         } 
     }
 
-    //Agregar error si no cumple con formato
+    let album = await db.Album.findOne({
+      where: {
+        id: album_id,
+      },
+     });
+  
+    if (!album) {
+      return res.status(422).send();
+    } 
+
     let trackidExists = await Track.findOne({
       where: {
         id: codificar(`${name}:${album_id}`),
       },
     });
-  
+
     if (trackidExists) {
-      return res.status(409).send({
-        message: 'A track with that id already exists!',
-        body: {
-          id: trackidExists.id,
-          album_id: trackidExists.album_id,
+      console.log('exist track', trackidExists)
+      return res.status(422).send({
+          // id: trackidExists.id,
+          // album_id: trackidExists.album_id,
           name: trackidExists.name,
           duration: trackidExists.duration,
           times_played: trackidExists.times_played,
           artist: fullUrl + `/artists/${trackidExists.artist_id}`,
           album: fullUrl + `/albums/${trackidExists.album_id}`,
           self: fullUrl + `/tracks/${trackidExists.id}`
-        }
       });
     }
-
-    let album = await db.Album.findOne({
-        where: {
-          id: album_id,
-        },
-       });
-    
-    if (!album) {
-        console.log('no hay album')
-        return res.status(422).send({
-          message: `No albums were found with id ${album_id}`,
-        });
-      } 
   
     try {
 
@@ -205,6 +193,8 @@ createTrack : async (req, res) => {
         duration: duration,
         times_played: 0
       });
+
+      console.log('newtrack', newtrack)
 
       return res.status(201).send(
         {
@@ -240,9 +230,7 @@ deleteTrack : async (req, res) => {
     });
   
     if (!track) {
-      return res.status(404).send({
-        message: `No track found with the id ${track_id}`,
-      });
+      return res.status(404).send();
     }
   
     try {
@@ -269,9 +257,7 @@ playTrack : async (req, res) => {
   });
 
   if (!track) {
-    return res.status(404).send({
-      message: `No track found with the id ${track_id}`,
-    });
+    return res.status(404).send();
   }
 
   try {
@@ -306,9 +292,7 @@ playTrackArtist : async (req, res) => {
     });
 
     if (!artist) {
-        return res.status(404).send({
-            message: `No artist found with the id ${artist_id}`,
-      });
+        return res.status(404).send();
     }
   
     try {

@@ -27,9 +27,7 @@ getAlbum : async (req, res) => {
     });
   
     if (!album) {
-      return res.status(400).send({
-        message: `No album found with the id ${album_id}`,
-      });
+      return res.status(404).send();
     }
     var fullUrl = req.protocol + '://' + req.get('host')
     album.dataValues['artist'] = fullUrl + `/artists/${album.artist_id}`;
@@ -50,10 +48,8 @@ getAllArtistAlbums : async (req, res) => {
     })
 
     if (!artist){
-      return res.status(400).send({
-      message: `No artist found with id ${artist_id }`
-        }
-      )};
+      return res.status(404).send()
+    };
   
     const albums = await Album.findAll({
       where: {
@@ -105,10 +101,11 @@ createAlbum : async (req, res) => {
       albumidExists.dataValues['tracks'] = fullUrl + `/albums/${albumidExists.id}/tracks`;
       albumidExists.dataValues['self'] = fullUrl + `/albums/${albumidExists.id}`;
 
-      return res.status(409).send({
-        message: 'An album with that id already exists!',
-        body: albumidExists,
-      });
+      return res.status(409).send(albumidExists)
+      // return res.status(409).send({
+      //   message: 'An album with that id already exists!',
+      //   body: albumidExists,
+      // });
     }
 
     let artist = await db.Artist.findOne({
@@ -160,17 +157,12 @@ deleteAlbum : async (req, res) => {
     });
   
     if (!album) {
-      return res.status(404).send({
-        message: `No album found with the id ${album_id}`,
-      });
+      return res.status(404).send();
     }
   
     try {
       await album.destroy();
       return res.status(204).end()
-      return res.status(204).send({
-        message: `Album ${album_id} has been deleted!`,
-      });
     } catch (err) {
       return res.status(400).send({
         message: `Error: ${err.message}`,
