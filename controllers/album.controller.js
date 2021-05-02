@@ -166,6 +166,7 @@ deleteAlbum : async (req, res) => {
   
     try {
       await album.destroy();
+      return res.status(204).end()
       return res.status(204).send({
         message: `Album ${album_id} has been deleted!`,
       });
