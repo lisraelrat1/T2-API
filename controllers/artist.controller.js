@@ -66,6 +66,7 @@ createArtist : async (req, res) => {
     });
   
     if (artistidExists) {
+      console.log('ya existe')
       var fullUrl = req.protocol + '://' + req.get('host')
       artistidExists.dataValues['albums'] = fullUrl + `/artists/${artistidExists.id}/albums`;
       artistidExists.dataValues['tracks'] = fullUrl + `/artists/${artistidExists.id}/tracks`;

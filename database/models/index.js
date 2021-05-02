@@ -8,6 +8,7 @@ const envConfigs =  require('../config/config');
 
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
+console.log(process.env.NODE_ENV)
 const config = envConfigs[env];
 const db = {};
 
