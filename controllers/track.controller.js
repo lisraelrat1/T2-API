@@ -306,12 +306,11 @@ playTrackArtist : async (req, res) => {
 
     if (!artist) {
         return res.status(404).send({
-            message: `No artist found with the id ${id}`,
+            message: `No artist found with the id ${artist_id}`,
       });
     }
   
     try {
-      
       tracks.forEach(track => {
         track.times_played += 1;
         track.save();
@@ -330,7 +329,7 @@ playTrackArtist : async (req, res) => {
 //playAlbum
 playTrackAlbum : async (req, res) => {
     const { album_id } = req.params;
-  
+    
     const tracks = await Track.findAll({
       where: {
         album_id: album_id,
