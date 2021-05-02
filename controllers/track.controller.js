@@ -169,7 +169,7 @@ createTrack : async (req, res) => {
 
     if (trackidExists) {
       console.log('exist track', trackidExists)
-      return res.status(422).send({
+      return res.status(409).send({
           // id: trackidExists.id,
           // album_id: trackidExists.album_id,
           name: trackidExists.name,
