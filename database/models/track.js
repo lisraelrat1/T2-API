@@ -31,11 +31,15 @@ module.exports = (sequelize, DataTypes) => {
   Track.associate = function(models) {
     Track.belongsTo(models.Artist, {
       foreignKey: 'artist_id',
-      as: 'artist'
+      as: 'artist',
+      onDelete: 'CASCADE',
+      hooks: true,
     });
     Track.belongsTo(models.Album, {
       foreignKey: 'album_id',
-      as: 'album'
+      as: 'album',
+      onDelete: 'CASCADE',
+      hooks: true,
     })
   };
 
