@@ -24,10 +24,10 @@ router.post('/artists', artists.createArtist);
 //Crea un album
 router.post('/artists/:artist_id/albums', albums.createAlbum);
 
-//Elimina un artista
+//Elimina un artistas
 router.delete('/artists/:artist_id', artists.deleteArtist);
 
-//Reproduce todas las canciones de un artista
+//Reproducheroku logs --taile todas las canciones de un artista
 router.put('/artists/:artist_id/albums/play', tracks.playTrackAlbum)
 
 //Album
